@@ -1,0 +1,77 @@
+[git教程](https://www.liaoxuefeng.com/wiki/896043488029600)
+[Git 原理入门](http://www.ruanyifeng.com/blog/2018/10/git-internals.html)
+
+## git配置
+    git config --global user.name "Your Name"
+    git config --global user.email "email@example.com"
+## 查看配置
+    git config --global  --list
+
+## 本机关联github
+### 1.创建SSH Key
+    ssh-keygen -t rsa -C "youremail@example.com"
+### 2.登陆GitHub，Add SSH Key
+
+## git流程
+### 本地->远程
+    1.本地新建仓库
+    git init
+    2.新建远程仓库
+    3.关联
+    git remote add origin git@github.com:ryine/note.git
+    git add * 
+    git commit -m "message"
+    git push -u origin master
+    git pull
+    git push origin master
+
+### 远程->本地
+    1.新建远程仓库
+    2.拉取远程仓库
+    git clone git@github.com:ryine/note.git
+    git add * 
+    git commit -m "message"
+    git pull
+    git push origin master
+
+### 合并merge
+    git merge --no-ff -m "merge with no-ff" dev
+    
+### 标签tag
+    1. git tag v1.0
+    2. git push origin --tags
+
+## git操作
+丢弃工作区的修改
+git checkout -- file
+
+把暂存区的修改回退到工作区
+git reset HEAD file
+
+从本地版本库回退已提交的代码
+git reset --hard commit_id
+
+git pull、git push使用
+
+禁用Fast forward模式合并
+git merge --no-ff -m "merge with no-ff" dev
+
+缓存工作区修改
+git stash
+git stash pop
+
+复制一个特定的提交到当前分支
+git cherry-pick <commit>
+
+推送分支到远程仓库
+git branch --set-upstream branch-name origin/branch-name
+
+## 分支
+创建分支并切换
+git checkout -b dev
+或者
+git branch dev
+git checkout dev
+
+删除分支
+git branch -d dev

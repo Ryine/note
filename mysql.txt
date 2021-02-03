@@ -1,0 +1,58 @@
+password：lin7303
+jTwxDQ9YEW9dK
+
+net start mysql 
+net stop mysql 
+mysql -uroot -p
+exit
+导入数据库
+source /home/abc/abc.sql
+
+git配置指南
+git config --global user.name "Your Name"
+git config --global user.email "email@example.com"
+查看配置信息
+git config --global  --list
+
+eslint配置
+npm install eslint --save-dev // 安装
+npm install eslint-config-standard eslint-plugin-standard eslint-plugin-promise --save-dev// 配置standard标准
+新建.eslintrc.js文件
+
+koa项目搭建
+路由、参数校验、错误处理、日志
+
+markdown预览
+ctrl + k 再按v
+
+ubuntu
+history // 命令行历史
+sudo su // root权限
+apt-get update // 更新软件源
+wget https://dev.mysql.com/get/mysql-apt-config_0.8.10-1_all.deb // 从网络下载一个文件并保存在当前目录 
+dpkg -i mysql-apt-config_0.8.10-1_all.deb // 安装软件包
+
+ubuntu下安装mysql8.0
+下载MySQL APT存储库
+wget https://dev.mysql.com/get/mysql-apt-config_0.8.10-1_all.deb
+安装软件包
+dpkg -i mysql-apt-config_0.8.10-1_all.deb
+apt-get update
+apt-get install mysql-server
+
+启动
+service mysql start
+停止
+service mysql stop
+登录
+mysql -u root -p
+
+远程连接配置
+1.登入mysql后，更改 "mysql" 数据库里的 "user" 表里的 "host" 项，从"localhost"改成"%"
+select host, user from user;
+update user set host = '%' where user = 'root'
+2.注释bind-address = 127.0.0.1, 位置/etc/mysql/mysql.conf.d/mysqld.cnf
+3.开发服务器3306端口
+
+卸载
+apt-get remove --purge mysql-\*
