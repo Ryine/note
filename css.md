@@ -68,3 +68,32 @@ defer:是延迟执行，在浏览器看起来的效果像是将脚本放在了bo
 位图
 纹理
 光栅化
+
+Compositor工作环境：GPU
+
+compositor与GPU关系：
+
+合成器可以使用GPU来执行其绘制步骤。
+
+​
+
+CPU任务：带软件光栅化的位图；
+
+GPU任务：
+
+1，硬件栅格化中的纹理；
+
+2，绘画是将图层组合成最终屏幕图像（单个位图）的合成器；
+
+GPU工作过程：接收位图，转换成纹理，配合compositor合成一张位图，存储到window’s backbuffer
+
+问题：
+GPU有没有加速
+
+浏览器渲染过程模型演化：
+DOM tree -> Render Object tree -> Render Layer tree -> Graphics Layer Tree -> CC Layer tree
+1: DOM tree的每个子节点都对应着一个html标签(并不是所有的HTML标签都是需要渲染的，例如script标签就不需要进行渲染)
+2: 对于需要渲染的HTML标签，它们会关联有一个Render Object。这些Render Object会形成一个Render Object Tree。Render Object tree加上了样式
+3: 为了便于执行绘制操作，具有相同坐标空间的Render Object会绘制在同一个Render Layer中。这些Render Layer又会形成一个Render Layer Tree
+4: Render Layer被提升成合成层之后就会拥有一个Graphics Layer,而其他不是合成层的渲染层，则和其第一个拥有 GraphicsLayer 的父层共用一个
+5、CC Layer tree是在Graphics Layer Tree创建的同时一并创建的，之间是一对一的
