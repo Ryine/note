@@ -62,8 +62,12 @@ defer:是延迟执行，在浏览器看起来的效果像是将脚本放在了bo
 浏览器在遇到<body>标签之前不会渲染页面的任何部分
 
 #### 渲染原理
-合成:
+[Chromium网页加载过程简要介绍和学习计划](https://blog.csdn.net/luoshengyang/article/details/50414848)
+[Chromium网页渲染机制简要介绍和学习计划](https://blog.csdn.net/Luoshengyang/article/details/50916769)
+[【中字】像素的一生 Life of a Pixel - Steve Kobes(Chrome Team)](https://www.bilibili.com/video/BV12b411w78Y)
+[Life of a Pixel 学习笔记](https://bengbu-yuezhang.github.io/2020/05/26/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93/)
 
+<!-- 合成:
 知识点：
 位图
 纹理
@@ -74,8 +78,6 @@ Compositor工作环境：GPU
 compositor与GPU关系：
 
 合成器可以使用GPU来执行其绘制步骤。
-
-​
 
 CPU任务：带软件光栅化的位图；
 
@@ -88,12 +90,29 @@ GPU任务：
 GPU工作过程：接收位图，转换成纹理，配合compositor合成一张位图，存储到window’s backbuffer
 
 问题：
-GPU有没有加速
+GPU有没有加速 -->
 
 浏览器渲染过程模型演化：
-DOM tree -> Render Object tree -> Render Layer tree -> Graphics Layer Tree -> CC Layer tree
+DOM tree -> Render Object tree -> Render Layer tree -> Graphics Layer Tree -> CC Layer tree -> CC Pending Layer Tree -> CC Active Layer Tree
 1: DOM tree的每个子节点都对应着一个html标签(并不是所有的HTML标签都是需要渲染的，例如script标签就不需要进行渲染)
 2: 对于需要渲染的HTML标签，它们会关联有一个Render Object。这些Render Object会形成一个Render Object Tree。Render Object tree加上了样式
 3: 为了便于执行绘制操作，具有相同坐标空间的Render Object会绘制在同一个Render Layer中。这些Render Layer又会形成一个Render Layer Tree
 4: Render Layer被提升成合成层之后就会拥有一个Graphics Layer,而其他不是合成层的渲染层，则和其第一个拥有 GraphicsLayer 的父层共用一个
 5、CC Layer tree是在Graphics Layer Tree创建的同时一并创建的，之间是一对一的
+6、Layer tree进行paint后到 Pending Layer Tree
+7、Pending Layer Tree进行光栅后激活成为Active Layer Tree
+
+渲染过程：
+
+parsing（解析HTML）-> style (生成样式规则模型) -> layout（生成布局对象）-> compositing update
+（输入合成）-> paint（绘制）-> commit（提交）-> tiling（切割）-> raster（栅格化）-> draw quads -> display（显示到屏幕上）
+
+渲染进程将HTML解析为为DOM树结构。
+渲染引擎将CSS样式表解析为CSSOM，并计算出DOM节点的样式。
+创建布局树，并计算元素的布局信息。
+对布局树进行分层，并生成分层树。
+为每个图层生成绘制列表，并将其提交到合成线程。
+合成线程将图层分成图块，并在光栅化线程池中将图块转换成位图。
+合成线程发送绘制图块命令DrawQuad给浏览器进程。
+浏览器进程根据DrawQuad消息生成页面，并显示到显示器上。
+
