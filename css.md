@@ -116,3 +116,7 @@ parsing（解析HTML）-> style (生成样式规则模型) -> layout（生成布
 合成线程发送绘制图块命令DrawQuad给浏览器进程。
 浏览器进程根据DrawQuad消息生成页面，并显示到显示器上。
 
+Performance工具：
+性能问题:
+1、Forced reflow(强制同步布局)
+

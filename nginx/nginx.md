@@ -13,7 +13,7 @@
 - 部署静态资源
 - 负载均衡
 - 访问限制
-- 跨域
+- 反向代理(跨域)
 
 ## 2.安装
     // 更新软件源
@@ -31,7 +31,7 @@
     
 <!-- > 配置文件nginx.conf -->
 ## 3.实践
-### 静态资源的部署
+### 静态资源部署
     server {
         listen 80;
         server_name localhost;
@@ -51,7 +51,7 @@
             deny all; // 禁止访问
         }
     }
-### 跨域
+### 反向代理(跨域)
     server {
         listen 80;
         server_name localhost;
@@ -75,7 +75,18 @@
         proxy_pass favtomcat;
     }
 
+## location匹配优先级
+优先级与配置中location的顺序没有关系，相同类型的表达式，字符串长的会优先匹配。
+优先级排列：
+1、等号精确匹配 =
+2、前缀匹配 ^~。一旦匹配成功，则不再查找其他匹配项
+3、正则表达式类型 ~ ~*。如果有多个location的正则能匹配的话，则使用正则表达式最长的那个。
+4、普通字符串匹配
 
+### 指令
+alias和root指令的区别
+1、root不会将location配置的路径去掉
+2、alias会将location配置的路径去掉
 
 
 <!-- fuser -n tcp 80
