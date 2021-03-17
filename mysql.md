@@ -7,6 +7,29 @@ varchar
 date
 datetime
 
+整数
+tinyint smallint mediumint int bigint
+分别使用8位 16位 32位 64位的存储空间
+
+字符串
+char 定长字符串，不足用空格填充 大小255 
+varchar 变长字符串 大小65535
+
+小数
+decimal(m,d)-精确计算
+DECIMAL(M,D)中，M范围是1到65，D范围是0到30。
+M默认为10，D默认为0，D不大于M。
+存储数值时，小数位不足会自动补0
+存储空间m+2
+
+float(m,d)-近似计算
+大小4字节，尽量不要指定精度
+double(m,d)-近似计算
+大小8字节
+
+时间
+date time datetime timestamp
+
 ## 数据定义(DDL)
 ### 数据库操作
 CREATE DATABASE text
@@ -51,7 +74,7 @@ DELETE FROM bill_receipt_type WHERE receipt_type_id = 2
 集合查询
 
 ### 函数
-
+IFNULL  DATE_FORMAT  GROUP_CONCAT  sum  count
 
 ## 实例
 狼人杀
@@ -174,3 +197,4 @@ SELECT a.* FROM tb_uhome_pay_log a left JOIN tb_uhome_pay_log_detail b ON a.PAY_
 ## 计划
 尝试之前业务的sql
 
+## 问题记录

@@ -368,5 +368,3 @@ SubType.prototype.sayAge = function(){
 
 ### promise
 [手写promise](https://juejin.cn/post/6844903843507994632#heading-3)
-
-### webpack

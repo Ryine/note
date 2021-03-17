@@ -48,8 +48,11 @@ git checkout -- file
 把暂存区的修改回退到工作区
 git reset HEAD file
 
-从本地版本库回退已提交的代码
+从本地版本库回退已提交的代码(如果此时代码已提交到远程版本库，推送新代码会发生错误)
 git reset --hard commit_id
+
+从本地版本库撤销某次提交，会产生新的commit,可以往远程仓库推送
+git revert HEAD | git revert 0ffaacc
 
 git pull、git push使用
 
