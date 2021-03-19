@@ -1,5 +1,11 @@
 [git教程](https://www.liaoxuefeng.com/wiki/896043488029600)
 [Git 原理入门](http://www.ruanyifeng.com/blog/2018/10/git-internals.html)
+[Git内部原理之Git对象](https://juejin.cn/post/6844903619175645192)
+
+## git原理
+![对象](/images/git_commit.png)
+
+Git中的数据对象解决了数据存储的问题，树对象解决了文件名存储问题，提交对象解决了提交信息的存储问题
 
 ## git配置
     git config --global user.name "Your Name"

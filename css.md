@@ -104,12 +104,12 @@ DOM tree -> Render Object tree -> Render Layer tree -> Graphics Layer Tree -> CC
 
 渲染过程：
 
-parsing（解析HTML）-> style (生成样式规则模型) -> layout（生成布局对象）-> compositing update
+parsing（解析HTML生成DOM树）-> style (生成样式规则模型) -> layout（生成布局对象）-> compositing update
 （输入合成）-> paint（绘制）-> commit（提交）-> tiling（切割）-> raster（栅格化）-> draw quads -> display（显示到屏幕上）
 
 渲染进程将HTML解析为为DOM树结构。
 渲染引擎将CSS样式表解析为CSSOM，并计算出DOM节点的样式。
-创建布局树，并计算元素的布局信息。
+创建布局树，并计算元素的布局信息(遍历布局树，填充几何数据)。
 对布局树进行分层，并生成分层树。
 为每个图层生成绘制列表，并将其提交到合成线程。
 合成线程将图层分成图块，并在光栅化线程池中将图块转换成位图。

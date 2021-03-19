@@ -38,7 +38,7 @@ forEach() 遍历的范围在第一次调用 callback 前就会确定。调用 fo
 ### 闭包
 
 闭包是指有权访问另一个函数作用域中的变量的函数(闭包就是能够读取其他函数内部变量的函数)
-
+(闭包只能取得包含函数中任何变量的最后一个值。别忘了闭包所保存的是整个变量对象，而不是某个特殊的变量)
 [学习Javascript闭包（Closure）](https://www.ruanyifeng.com/blog/2009/08/learning_javascript_closures.html)
 参考资料:红宝书p73、p178
 
@@ -55,6 +55,7 @@ this的指向:
   匿名函数的this是执行时的上下文(通常是window)
 5、箭头函数
   定义时的父级执行上下文
+6、setTimeout的this指向
 
 ### apply、call、bind
 [this、apply、call、bind](https://juejin.cn/post/6844903496253177863#heading-0)
@@ -88,7 +89,7 @@ Function.prototype.bind2 = function (context) {
 var getSingle = function( fn ){
  var result;
  return function(){
-   return result || ( result = fn .apply(this, arguments ) );
+   return result || ( result = fn.apply(this, arguments ) );
  }
 };
 // 创建对象
@@ -255,9 +256,23 @@ var Beverage = function (param) {
 
 
 ### class
+class的实现是组合使用构造函数模式和原型模式
+class的继承是用寄生组合式继承，只是多了一个Object.setPrototypeOf(subClass, superClass)
+subClass.__proto__ = superClass
+
+## 对象
+### 创建对象
+工厂模式
+构造函数模式
+原型模式
+组合使用构造函数模式和原型模式(使用最广泛)
+动态原型模式
 
 
 ### 原型链
+原型属性:constructor、prototype、__proto__
+
+
 in： 对象上不管原型还是实例，可枚举，皆可访问到(不包含不可枚举)
 hasOwnProperty： 实例上,论它是否可枚举(不包含原型)
 Object.keys: 可枚举的实例属性(不包含原型)
@@ -305,7 +320,7 @@ alert(instance.name); //"Nicholas";
 alert(instance.age); //29 
 ```
 
-组合继承：
+组合继承：(最常用的继承模式)
 使用原型链实现对原型属性和方法的继承，而通过借用构造函数来实现对实例属性的继承
 ```
 function SuperType(name){
