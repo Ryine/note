@@ -246,6 +246,11 @@ location /api {
 }
 3、cors
 [跨域资源共享 CORS 详解](https://www.ruanyifeng.com/blog/2016/04/cors.html)
+1、简单请求
+请求包含Origin字段，服务器返回Access-Control-Allow-Origin;如需cookie要另外处理
+
+2、复杂请求
+首先会发起一个预检请求,浏览器自动发起；服务器需设置回应
 配置例子：
 location / {  
   add_header Access-Control-Allow-Origin *;
@@ -264,6 +269,10 @@ location / {
 
 ### http2
 新特性：
-多路复用
+多路复用(帧和流的概念)
+一个请求分被分为多个帧，一个请求是一个流，一个连接可以有多个流，不同流中的帧可以无序发送，同一个流中的帧是有序的
 header压缩
 服务端推送
+
+### CDN + DNS
+[CDN原理简析](https://juejin.cn/post/6844903873518239752)

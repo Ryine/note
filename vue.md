@@ -60,3 +60,50 @@ $options包含:
   1.Vue.options(构造函数的options.initGlobalAPI: components, directives, filters, _base ), 
   2.new Vue(options)(外部调用new vue方法传的options)
 
+
+
+# vue原理
+## new Vue构造函数 
+```
+function Vue(options) {
+  ...
+  this._init(options)
+}
+
+initMixin(Vue)
+stateMixin(Vue)
+eventsMixin(Vue)
+lifecycleMixin(Vue)
+renderMixin(Vue)
+```
+### _init 进行初始化
+```
+let uid = 0
+
+Vue.prototype._init = function(options) {
+
+  const vm = this
+  vm._uid = uid++  // 唯一标识
+
+  vm.$options = mergeOptions(  // 合并options
+    resolveConstructorOptions(vm.constructor),
+    options || {},
+    vm
+  )
+  ...
+  initLifecycle(vm) // 开始一系列的初始化
+  initEvents(vm)
+  initRender(vm)
+  callHook(vm, 'beforeCreate')
+  initInjections(vm)
+  initState(vm)
+  initProvide(vm)
+  callHook(vm, 'created')
+  ...
+  if (vm.$options.el) {
+    vm.$mount(vm.$options.el)
+  }
+}
+```
+
+问题: inject时defineReactive作用

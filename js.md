@@ -383,3 +383,30 @@ SubType.prototype.sayAge = function(){
 
 ### promise
 [手写promise](https://juejin.cn/post/6844903843507994632#heading-3)
+
+### 防抖节流
+防抖函数
+```
+function debounce(fn, delay) {
+  let timeout = null; // 创建一个标记用来存放定时器的返回值
+  return function () {
+    clearTimeout(timeout); // 每当用户输入的时候把前一个 setTimeout clear 掉
+    timeout = setTimeout(() => { // 然后又创建一个新的 setTimeout, 这样就能保证输入字符后的 interval 间隔内如果还有字符输入的话，就不会执行 fn 函数
+      fn.apply(this, arguments);
+    }, delay);
+  };
+}
+```
+节流函数
+```
+function throttle(fn, delay) {
+  let timer;
+  return function () {
+    if (timer) return
+    timer = setTimeout(() => {
+      fn.apply(this, arguments);
+      timer = null; // 在delay后执行完fn之后清空timer，此时timer为假，throttle触发可以进入计时器
+    }, delay)
+  }
+}
+```
