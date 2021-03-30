@@ -69,7 +69,7 @@ function Vue(options) {
   ...
   this._init(options)
 }
-
+// 初始化一些原型方法
 initMixin(Vue)
 stateMixin(Vue)
 eventsMixin(Vue)
@@ -91,13 +91,14 @@ Vue.prototype._init = function(options) {
     vm
   )
   ...
-  initLifecycle(vm) // 开始一系列的初始化
-  initEvents(vm)
-  initRender(vm)
+  // 开始一系列的初始化
+  initLifecycle(vm) // 确认组件的父子关系和初始化某些实例属性
+  initEvents(vm) // 将父组件在使用v-on或@注册的自定义事件添加到子组件的事件中心中
+  initRender(vm) // 挂载可以将render函数转为vnode的方法
   callHook(vm, 'beforeCreate')
-  initInjections(vm)
-  initState(vm)
-  initProvide(vm)
+  initInjections(vm) // 让子组件inject的项可以访问到正确的值
+  initState(vm) // 将组件定义的状态挂载到this下
+  initProvide(vm) // 初始化父组件提供的provide依赖
   callHook(vm, 'created')
   ...
   if (vm.$options.el) {
@@ -107,3 +108,118 @@ Vue.prototype._init = function(options) {
 ```
 
 问题: inject时defineReactive作用
+
+## 组件挂载
+vm._update(vm._render())
+
+### vm._render
+普通元素节点转vnode 
+直接new VNode
+
+组件转为vnode 
+将组件对象转为Vue的子类baseCtor.extend(Ctor) 再new VNode 并将组件信息保存进vnode
+
+### vm._update
+```
+export function createPatchFunction(backend) { 
+  ...
+
+  return function (oldVnode, vnode) {  // 接收新旧vnode
+
+    const insertedVnodeQueue = []
+    ...
+    const oldElm = oldVnode.elm  //包装后的真实Dom <div id='app'></div>
+    const parentElm = nodeOps.parentNode(oldElm)  // 首次父节点为<body></body>
+
+    createElm(  // 创建真实Dom
+      vnode, // 第二个参数
+      insertedVnodeQueue,  // 空数组
+      parentElm,  // <body></body>
+      nodeOps.nextSibling(oldElm)  // 下一个节点
+    )
+
+    return vnode.elm // 返回真实Dom覆盖vm.$el
+  }
+}
+```
+- 1、元素节点生成Dom:
+简单来说就是由里向外的挨个创建出真实的Dom，然后插入到它的父节点内，最后将创建好的Dom插入到body内，完成创建的过程
+
+```
+function createElm(vnode, insertedVnodeQueue, parentElm, refElm, nested, ownerArray, index) { 
+  ...
+  const children = vnode.children  // [VNode, VNode, VNode]
+  const tag = vnode.tag  // div
+
+  if (createComponent(vnode, insertedVnodeQueue, parentElm, refElm)) {
+    return  // 如果是组件结果返回true，不会继续，之后详解createComponent
+  }
+
+  if(isDef(tag)) {  // 元素节点
+    vnode.elm = nodeOps.createElement(tag)  // 创建父节点
+    createChildren(vnode, children, insertedVnodeQueue)  // 创建子节点
+    insert(parentElm, vnode.elm, refElm)  // 插入
+
+  } else if(isTrue(vnode.isComment)) {  // 注释节点
+    vnode.elm = nodeOps.createComment(vnode.text)  // 创建注释节点
+    insert(parentElm, vnode.elm, refElm); // 插入到父节点
+
+  } else {  // 文本节点
+    vnode.elm = nodeOps.createTextNode(vnode.text)  // 创建文本节点
+    insert(parentElm, vnode.elm, refElm)  // 插入到父节点
+  }
+
+  ...
+}
+```
+- 2. 组件VNode生成Dom
+new vnode.componentOptions.Ctor(options)
+child.$mount(undefined)
+vm._update(vm._render())
+```
+function createComponent(vnode, insertedVnodeQueue, parentElm, refElm) {
+  let i = vnode.data;
+  if (isDef(i)) {
+    if (isDef(i = i.hook) && isDef(i = i.init)) {
+      i(vnode)  // init已经完成
+    }
+
+    if (isDef(vnode.componentInstance)) {  // 执行组件init时被赋值
+
+      initComponent(vnode)  // 赋值真实dom给vnode.elm
+
+      insert(parentElm, vnode.elm, refElm)  // 组件Dom在这里插入
+      ...
+      return true  // 所以会直接return
+    }
+  }
+}
+```
+
+### diff算法(双端对比)
+```
+function sameVnode (a, b) {  // 是否是相同的VNode节点
+  return (
+    a.key === b.key && (  // 如平时v-for内写的key
+      (
+        a.tag === b.tag &&   // tag相同
+        a.isComment === b.isComment &&  // 注释节点
+        isDef(a.data) === isDef(b.data) &&  // 都有data属性
+        sameInputType(a, b)  // 相同的input类型
+      ) || (
+        isTrue(a.isAsyncPlaceholder) &&  // 是异步占位符节点
+        a.asyncFactory === b.asyncFactory &&  // 异步工厂方法
+        isUndef(b.asyncFactory.error)
+      )
+    )
+  )
+}
+```
+当判断两个节点为相同节点时，进入patchVnode
+核心diff为新旧节点均有多个子节点，进行updateChildren：
+首选进行四次快速查找:
+1、新开始和旧开始节点比对
+2、旧结束和新结束节点比对
+3、旧开始和新结束节点比对
+4、旧结束和新开始节点比对
+再进行 key值查找
