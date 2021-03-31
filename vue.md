@@ -223,3 +223,36 @@ function sameVnode (a, b) {  // 是否是相同的VNode节点
 3、旧开始和新结束节点比对
 4、旧结束和新开始节点比对
 再进行 key值查找
+
+## 响应式原理
+问题：Watcher Observer是什么
+每个key的dep被闭包保存在Object.defineProperty里
+数组的依赖收集还是在get方法里，不过依赖的存放位置会有不同，不是在defineReactive方法的dep里，而是在Observer类中的dep里，依赖的更新是在拦截器里的数组异变方法最后手动更新的。
+
+Dep Observer Watcher三者的关系
+Observer-数据的观察者
+Dep-依赖管理
+Watcher-数据的订阅者
+
+Watcher分类
+1、render-watcher
+对象
+initData -> observe -> new Observer() -> defineReactive -> Object.defineProperty(定义get、set) -> 
+new Watcher(vm, updateComponent) -> this.get()-> this.getter() -> updateComponent -> 触发依赖收集 ->
+get() -> dep.depend() -> 触发派发依赖 -> set() -> dep.notify() ->  watcher.run() -> updateComponent
+
+数组
+对象的依赖收集在数据属性的get的dep，依赖派发在set
+数组的依赖收集在数据属性的get里赋值给Observer的dep(childOb.dep.depend()),依赖派发在数组变异方法触发ob.dep.notify()
+(数组的依赖收集还是在get方法里，不过依赖的存放位置会有不同，不是在defineReactive方法的dep里，而是在Observer类中的dep里，依赖的更新是在拦截器里的数组异变方法最后手动更新的。)
+
+2、user-watcher
+initWatch -> createWatcher -> vm.$watch -> new Watcher(vm, expOrFn, cb, options) -> this.get() -> this.getter -> 读取数据触发get收集user-watcher依赖 -> dep.depend() -> 触发派发依赖 -> set() -> dep.notify() ->  watcher.run() -> cb.call(this.vm, value, oldValue)
+注：这里数据会收集user-watcher和render-watcher
+
+3、computed-watcher
+initComputed -> new Watcher(vm, getter, noop, {lazy: true}) -> defineComputed -> Object.defineProperty -> createComputedGetter -> 
+watcher.evaluate() ->  this.get() -> this.getter.call(vm, vm) -> 访问callback读取到依赖的数据 -> 依赖的数据收集computed-watcher ->
+watcher.depend() -> 计算属性内能访问到的响应式数据的dep收集当前的render-watcher -> set() -> 触发computed-watcher和render-watcher
+
+注：这里数据会收集computed-watcher和render-watcher
