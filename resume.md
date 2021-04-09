@@ -3,7 +3,7 @@
 
 技能:
 jenkins自动化部署
-webpack配置及性能优化
+熟悉webpack配置及性能优化
 熟悉计算机网络，熟悉http、https协议
 了解nginx配置,了解linux环境及熟悉其基本操作
 熟练使用git、svn等版本控制工具
@@ -24,14 +24,14 @@ redis
 - 事件循环
 - 跨域
 - bfc
-手写promise
-模块化
+- 手写promise
+- 模块化
 排序
 - 设计模式
 数据结构和算法
 webview、jsBridge
 - 防抖节流函数
-webpack
+- webpack
 - cdn
 - dns
 
@@ -39,7 +39,7 @@ webpack
 - nginx
 - jenkins
 - git、svn
-vue原理
+- vue原理
 - mysql
 - 小程序
 
@@ -58,3 +58,11 @@ leetcode重刷
 #70 动态规划
 #88 看 双指针
 #94 树的中序遍历
+#98 树的中序遍历 二叉查找树
+#101 对称二叉树
+#104 二叉树最大深度
+#121 动态规划
+#136 哈希集
+#141 环形链表
+#144 树的前序遍历
+#145 树的后序遍历
