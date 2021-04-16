@@ -1,16 +1,14 @@
-技能
-了解Node.js
 
 技能:
-jenkins自动化部署
-熟悉webpack配置及性能优化
-熟悉计算机网络，熟悉http、https协议
-了解nginx配置,了解linux环境及熟悉其基本操作
+精通CSS3/HTML5/ES6, 熟悉前端框架vue及原理
+熟悉webpack配置及前端性能优化
+熟悉TCP协议栈，熟悉http、https协议
+了解nginx配置及运用,熟悉Linux环境及熟悉其基本操作
 熟练使用git、svn等版本控制工具
-熟练掌握Javascript/CSS/HTML, 熟悉前端框架vue及原理
-node
-了解mysql、mongodb
-redis
+掌握基于jenkins的自动化部署发布
+熟悉nodejs开发
+了解mysql、redis等数据库
+熟悉小程序开发
 
 隐藏技能:
 - tcp
@@ -26,7 +24,7 @@ redis
 - bfc
 - 手写promise
 - 模块化
-排序
+- 排序
 - 设计模式
 数据结构和算法
 webview、jsBridge
@@ -34,6 +32,10 @@ webview、jsBridge
 - webpack
 - cdn
 - dns
+vue3+ts
+
+面试题:
+深浅拷贝
 
 简历技能:
 - nginx
@@ -42,6 +44,30 @@ webview、jsBridge
 - vue原理
 - mysql
 - 小程序
+
+毕业简历技能
+熟悉HTML，CSS 等基础知识，熟悉w3c标准与web语义化。
+熟练原生JavaScript、DOM、AJAX编程、SCSS，了解ES6语法。
+熟练使用MVVM框架Vue及各种第三方库，了解react。
+熟悉http协议，熟悉前后端分离及前后台的交互。
+了解nginx配置，部署过静态项目。了解SQL server数据库，及SQL语句。
+可以熟练运用PhotoShop进行切图，版本控制工具git，及blue等设计协作工具。
+了解linux系统，在腾讯云及Google cloud platform服务器上部署过应用。 
+
+工作经验
+负责公司Sass平台核心代码开发，公共组件开发，技术攻关
+负责前端小组管理，任务分解，工作跟进
+做前瞻性的技术分析及应用，推动web应用性能优化，研发效率提升
+负责前端研发团队管理，负责产品前端整体架构设计，核心代码开发和审核工作； 
+根据业务架构设计与业务需求，指导团队系统设计与开发工作； 
+参与项目的业务分析、技术方案、系统架构设计、前端技术选型、技术攻关与核心模块设计与开发； 
+根据业务及技术发展，做前瞻性的技术分析、研究及应用； 
+提升团队的系统分析与架构能力，提升开发人员设计水平、前端开发水平。
+
+项目经验
+不动产经营与物业管理数字化平台
+金隅小程序
+文档库
 
 leetcode重刷
 #1 哈希表
@@ -66,3 +92,6 @@ leetcode重刷
 #141 环形链表
 #144 树的前序遍历
 #145 树的后序遍历
+#155 栈
+#160 相交链表
+#169 多数元素
