@@ -32,6 +32,8 @@ webview、jsBridge
 - webpack
 - cdn
 - dns
+动画
+canvas
 事件
 vue3+ts
 react-hook
