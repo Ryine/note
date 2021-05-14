@@ -18,6 +18,10 @@ height一般情况下子元素影响父元素，而且又分成若干种情况�
 
 4、inline-block的宽高根据内容自适应
 
+## 浮动
+浮动元素同时处于常规流内和流外的元素。其中块级元素认为浮动元素不存在，而浮动元素会影响行内元素的布局，浮动元素会通过影响行内元素间接影响了包含块的布局。
+对于行内元素：浮动元素之后的元素将围绕它，浮动元素之前的元素将不会受到影响。
+
 ## BFC(块格式化上下文)
 [学习 BFC (Block Formatting Context)](https://juejin.cn/post/6844903495108132877#heading-17)
 [什么是BFC?](https://juejin.cn/post/6844903544726749198)
@@ -40,6 +44,39 @@ BFC的约束规则:
 BFC的区域不会与float的元素区域重叠
 计算BFC的高度时，浮动子元素也参与计算
 BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面元素，反之亦然
+
+## 布局
+[各种常见布局实现](https://juejin.cn/post/6844903574929932301)
+
+### 居中
+1、position: absolute;top: 50%;left: 50%; + transform: translate(-50%,-50%); 
+2、position: absolute;top: 0;bottom: 0;left: 0;right: 0;margin: auto;（需有固定宽高）
+3、flex
+4、行内:height与line-height相等;text-align: center;vertical-align: middle;
+
+
+### 两列布局
+1、float
+  float+margin
+  float+float
+  float+overflow
+2、absolute
+3、flex
+4、Grid
+
+### 三列布局
+1、float
+  float+margin
+  float+overflow
+2、flex
+3、grid
+4、absolute
+
+### 全屏布局
+flex
+
+
+
 
 ### 浏览器渲染页面
 #### 页面渲染流程:

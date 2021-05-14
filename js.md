@@ -18,6 +18,7 @@ import 命令会被 JavaScript 引擎静态分析，优先于模块内的其他�
 export 命令会有变量声明提前的效果。
 
 循环依赖处理
+发现循环依赖时，并不会继续执行下去,只生成一个引用
 获取模块已经加载的当前的最新值
 
 ### forEach循环
@@ -41,6 +42,71 @@ forEach() 遍历的范围在第一次调用 callback 前就会确定。调用 fo
 (闭包只能取得包含函数中任何变量的最后一个值。别忘了闭包所保存的是整个变量对象，而不是某个特殊的变量)
 [学习Javascript闭包（Closure）](https://www.ruanyifeng.com/blog/2009/08/learning_javascript_closures.html)
 参考资料:红宝书p73、p178
+
+闭包的应用：
+1、防抖节流
+2、封装私有变量
+`
+function Person(){
+    var name = 'default';
+    this.getName:function(){
+        return name;
+    }
+    this,setName:function(value){
+        name = value;
+    }
+}
+`
+3、存储变量
+a、缓存代理（设计模式-代理模式）
+`
+var proxyMult = (function(){
+ var cache = {};
+ return function(){
+ var args = Array.prototype.join.call( arguments, ',' );
+ if ( args in cache ){
+ return cache[ args ];
+ }
+ return cache[ args ] = mult.apply( this, arguments );
+ }
+})();
+`
+b、单例模式
+`
+var getSingle = function( fn ){
+ var result;
+ return function(){
+ return result || ( result = fn .apply(this, arguments ) );
+ }
+};
+`
+### js深浅拷贝
+深拷贝考虑情况
+考虑null
+对象
+数组
+set
+map
+函数
+循环引用
+new Number生成的数字类型
+
+### 垃圾回收&&内存泄漏
+#### 垃圾回收算法
+新生代：内存分半复制
+老生代：标记清除、标记整理
+
+#### 内存泄露原因
+全局变量
+闭包
+引用没有清除（weakMap)
+没有清理的 DOM 元素引用
+window.addEventListener事件注册没有解绑(观察者模式)
+缓存
+队列-消费速度低于生产速度
+
+- 怎么判断变量是否存活—可达性分析
+
 
 ### this
 [JavaScript 的 this 原理](https://www.ruanyifeng.com/blog/2018/06/javascript-this.html)
@@ -385,7 +451,7 @@ SubType.prototype.sayAge = function(){
 [手写promise](https://juejin.cn/post/6844903843507994632#heading-3)
 
 ### 防抖节流
-防抖函数
+防抖函数-在事件被触发n秒后再执行回调，如果在这n秒内又被触发，则重新计时。
 ```
 function debounce(fn, delay) {
   let timeout = null; // 创建一个标记用来存放定时器的返回值
@@ -397,7 +463,7 @@ function debounce(fn, delay) {
   };
 }
 ```
-节流函数
+节流函数-规定在一个单位时间内，只能触发一次函数。如果这个单位时间内触发多次函数，只有一次生效。
 ```
 function throttle(fn, delay) {
   let timer;
@@ -410,3 +476,19 @@ function throttle(fn, delay) {
   }
 }
 ```
+
+### 字符集与字符编码
+[Unicode与JavaScript详解](http://www.ruanyifeng.com/blog/2014/12/unicode.html)
+[字符编码笔记：ASCII，Unicode 和 UTF-8](http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html)
+
+#### 字符集
+字符集：是一个系统支持的所有抽象字符的集合。字符是各种文字和符号的总称，包括各国家文字、标点符号、图形符号、数字等。
+常见字符集Unicode，每个字符有一个码点
+
+#### 字符编码
+规定字符码点在计算机怎么存储怎么表示
+
+utf-32:定长;4个字节表示一个字符
+utf-8:一种变长的编码方法，字符长度从1个字节到4个字节不等;中文字符3个字节
+utf-16:基本平面的字符占用2个字节，辅助平面的字符占用4个字节
+ASCII:
