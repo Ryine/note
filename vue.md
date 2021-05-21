@@ -256,3 +256,30 @@ watcher.evaluate() ->  this.get() -> this.getter.call(vm, vm) -> 访问callback�
 watcher.depend() -> 计算属性内能访问到的响应式数据的dep收集当前的render-watcher -> set() -> 触发computed-watcher和render-watcher
 
 注：这里数据会收集computed-watcher和render-watcher
+
+
+## transition组件原理
+[Vue源码解析之transition(一)](https://juejin.cn/post/6879691016317141005)
+
+### src\platforms\web\runtime\components\transition.js
+- 组件
+
+将transition组件传入的属性（prop和事件）赋值给真实子节点，并用render函数返回子节点
+
+### src\platforms\web\runtime\modules\transition.js
+- js逻辑
+输出create/active/remove钩子，提供给组件patch的过程中调用
+
+transition组件只是对props与几个回调函数做了处理，将其绑定在真实子元素上。
+在patch过程中会触发create/activate/insert/remove钩子，这些hook存储了了用户及组件定义的钩子函数，当组件钩子触发的时候，定义的回调函数也被触发了。
+由这些回调函数通过给元素在不同时期添加/删除不同的class，通过css来添加过渡效果。
+
+
+## vue3新特性
+组合式api
+Teleport
+多个v-model
+支持多根节点组件，即片段
+vue3的v-if 会拥有比 v-for 更高的优先级,而vue2 v-for 会优先作用
+单文件组件 <style scoped> 现在可以包含全局规则或只针对插槽内容的规则
+
