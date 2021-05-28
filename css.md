@@ -161,3 +161,21 @@ Performance工具：
 
 ### 硬件加速原理（与提升图层区别，gpu渲染区别）
 提高渲染效率 重绘重排
+硬件加速在CSS动画上是指GPU合成（GPU compositing），浏览器不直接通过CPU生成图像数据显示出来，
+硬件加速是指GPU栅格化？
+
+那么如何才能创建一个层呢？
+3d transform属性
+backface-visibility为hidden的元素
+使用加速视频解码的 <video> 元素
+拥有 3D (WebGL) 上下文或加速的 2D 上下文的 <canvas> 元素
+混合插件(如 Flash)
+对 opacity、transform、fliter、backdrop-filter 应用了 animation 或者 transition（需要是 active 的 animation 或者 transition，当 animation 或者 transition 效果未开始或结束后，合成层也会失效）
+will-change 设置为 opacity、transform、top、left、bottom、right（其中 top、left 等需要设置明确的定位属性，如 relative 等）
+元素有一个包含复合层的后代节点(换句话说，就是一个元素拥有一个子元素，该子元素在自己的层里)
+元素有一个 z-index 较低且包含一个复合层的兄弟元素(换句话说就是该元素在复合层上面渲染)
+
+浏览器渲染方式有三种：
+1、软件渲染-只用cpu进行渲染，没有合成的过程
+2、使用软件绘图的合成化渲染
+3、硬件加速的合成化渲染
