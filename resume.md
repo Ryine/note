@@ -24,14 +24,14 @@
 - bfc
 - 手写promise
 - 模块化
-- 排序
+- 排序1
 - 设计模式
 数据结构和算法
 webview、jsBridge
 - 防抖节流函数
 - webpack
-- cdn
-- dns
+- - cdn
+- - dns
 动画
 canvas
 事件
@@ -123,3 +123,4 @@ leetcode重刷
 #237 删除链表节点
 #283 移动零 双指针
 #300 最长递增子序列
+#344 反转字符串

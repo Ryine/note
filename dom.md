@@ -49,3 +49,28 @@ outerWidth,outerHeight: 浏览器窗口本身的尺寸
 
 ## 思考
 querySelectorAll 方法与getElementsBy 系列方法区别
+
+
+## 事件
+UI事件
+load、unload、error、resize、scroll
+
+焦点事件
+focus、blur
+
+鼠标与滚轮事件
+click、dblclick、mousedown、mouseup、mouseenter、mouseleave、mousemove、mouseout、mouseover
+
+键盘与文本事件
+keydown、keypress、keyup
+
+复合事件
+compositionstart、compositionupdate、compositionend
+
+变动事件(DOM)
+
+HTML5 事件(补充)
+beforeunload、DOMContentLoaded、readystatechange、 pageshow 和 pagehide、hashchange
+
+触摸与手势事件
+touchstart、touchmove、touchend

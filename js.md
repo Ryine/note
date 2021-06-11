@@ -338,6 +338,9 @@ subClass.__proto__ = superClass
 ### 原型链
 原型属性:constructor、prototype、__proto__
 
+实例与构造函数原型之间有直接的联系，但实例与构造函数之间没有。
+
+Object.create()
 
 in： 对象上不管原型还是实例，可枚举，皆可访问到(不包含不可枚举)
 hasOwnProperty： 实例上,论它是否可枚举(不包含原型)
