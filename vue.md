@@ -283,3 +283,9 @@ Teleport
 vue3的v-if 会拥有比 v-for 更高的优先级,而vue2 v-for 会优先作用
 单文件组件 <style scoped> 现在可以包含全局规则或只针对插槽内容的规则
 
+## vue3+ts学习问题
+setup规范写法 看到有些人在setup写一堆代码
+vue3结合ts
+options api +ts 如何写
+ts声明文件
+vue3的vuex和router

@@ -114,14 +114,15 @@ window.addEventListener事件注册没有解绑(观察者模式)
 
 总的来说，this就是函数运行时所在的环境对象(this 永远指向最后调用它的那个对象)
 this的指向:
-1、普通的函数调用
-2、作为对象的方法调用
-3、作为构造函数调用
-4、匿名函数调用
-  匿名函数的this是执行时的上下文(通常是window)
-5、箭头函数
+1、普通的函数调用 (指向全局对象)
+2、作为对象的方法调用 (隐式绑定;指向包含上下文)
+3、作为构造函数调用 (指向新创建的对象)
+4、显式绑定，call、apply
+<!-- 5、匿名函数调用 -->
+  <!-- 匿名函数的this是执行时的上下文(通常是window) -->
+6、箭头函数
   定义时的父级执行上下文
-6、setTimeout的this指向
+<!-- 7、setTimeout的this指向 -->
 
 ### apply、call、bind
 [this、apply、call、bind](https://juejin.cn/post/6844903496253177863#heading-0)
@@ -319,6 +320,34 @@ var Beverage = function (param) {
 7、适配器模式
 适配器模式的作用是解决两个软件实体间的接口不兼容的问题。使用适配器模式之后，原本由于接口不兼容而不能工作的两个软件实体可以一起工作。
 适配器的别名是包装器（wrapper），这是一个相对简单的模式。在程序开发中有许多这样的场景：当我们试图调用模块或者对象的某个接口时，却发现这个接口的格式并不符合目前的需求。这时候有两种解决办法，第一种是修改原来的接口实现，但如果原来的模块很复杂，或者我们拿到的模块是一段别人编写的经过压缩的代码，修改原接口就显得不太现实了。第二种办法是创建一个适配器，将原接口转换为客户希望的另一个接口，客户只需要和适配器打交道。
+
+8、装饰者模式
+这种给对象动态地增加职责的方式称为装饰者（decorator）模式。装饰者模式能够在不改变对象自身的基础上，在程序运行期间给对象动态地添加职责。跟继承相比，装饰者是一种更轻便灵活的做法，这是一种“即用即付”的方式，比如天冷了就多穿一件外套，需要飞行时就在头上插一支竹蜻蜓，遇到一堆食尸鬼时就点开 AOE（范围攻击）技能。
+
+典型应用:数据统计上报、插件式的表单验证
+示例
+```
+Function.prototype.before = function( beforefn ){
+ var __self = this; // 保存原函数的引用
+ return function(){ // 返回包含了原函数和新函数的"代理"函数
+ beforefn.apply( this, arguments ); // 执行新函数，且保证 this 不被劫持，新函数接受的参数
+ // 也会被原封不动地传入原函数，新函数在原函数之前执行
+ return __self.apply( this, arguments ); // 执行原函数并返回原函数的执行结果，
+ // 并且保证 this 不被劫持
+ }
+}
+Function.prototype.after = function( afterfn ){
+ var __self = this;
+ return function(){
+ var ret = __self.apply( this, arguments );
+ afterfn.apply( this, arguments );
+ return ret;
+ }
+}; 
+
+```
+
+
 
 
 ### class

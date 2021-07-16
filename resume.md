@@ -17,14 +17,14 @@
 - http2
 - this、apply、call、bind
 - 闭包
-- 原型、继承、class
+- - 原型、继承、class
 - 浏览器渲染原理
 - 事件循环
 - 跨域
 - bfc
 - 手写promise
 - 模块化
-- 排序1
+- 排序
 - 设计模式
 数据结构和算法
 webview、jsBridge
