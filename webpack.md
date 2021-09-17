@@ -153,5 +153,19 @@ vue-cli3分割策略:
 }
 `
 ### webpack原理
-loader原理
-plugin原理
+[干货！撸一个webpack插件(内含tapable详解+webpack流程)](https://juejin.cn/post/6844903713312604173#heading-2)
+[webpack原理都不会？](https://github.com/Cosen95/blog/issues/48)
+[webpack原理](https://juejin.cn/post/6844903614469636103#heading-2)
+[Webpack tapable 使用研究](https://juejin.cn/post/6844903895584473096#heading-16)
+
+- webpack 本质上就是一个插件集合，由 tapable 控制各插件在 webpack 事件流上运行
+
+#### webapck构建流程：
+初始化: 启动构建，读取与合并配置参数，实例化 Compiler,加载 Plugin
+compile:开始编译,执行对象的 run 方法开始执行编译
+make: 分析入口文件,创建模块对象
+build-nodule: 模块构建,从入口文件出发，调用所有配置的 Loader 对模块进行翻译，再找出该模块依赖的模块，再递归本步骤直到所有入口依赖的文件都经过了本步骤的处理(AST阶段)
+seal: 封装构建结果,逐次对每个 module 和 chunk 进行整理，生成编译后的源码，合并，拆分，生成 hash
+emit: 输出资源,在确定好输出内容后，根据配置确定输出的路径和文件名，把文件内容写入到文件系统。
+
+#### webpack打包后文件分析

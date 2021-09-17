@@ -15,6 +15,7 @@
 - https详解
 - http缓存
 - http2
+http3
 - this、apply、call、bind
 - 闭包
 - - 原型、继承、class
@@ -39,10 +40,13 @@ vue3+ts
 react-hook
 memory工具
 热加载缓慢定位
-
+webpack原理
+babel原理
+函数实现
 
 面试题:
 深浅拷贝
+如何在一个不安全的环境中实现安全的数据通信
 
 简历技能:
 - nginx

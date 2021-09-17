@@ -272,9 +272,32 @@ location / {
 
 新特性：
 多路复用(帧和流的概念)
-一个请求分被分为多个帧，一个请求是一个流，一个连接可以有多个流，不同流中的帧可以无序发送，同一个流中的帧是有序的
+一个请求分被分为多个帧，一个请求是一个流，一个连接可以有多个流，不同流中的帧可以无序发送
 header压缩
 服务端推送
 
 ### CDN + DNS
 [CDN原理简析](https://juejin.cn/post/6844903873518239752)
+
+### http3
+[深入剖析HTTP3协议](https://www.taohui.tech/2021/02/04/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/%E6%B7%B1%E5%85%A5%E5%89%96%E6%9E%90HTTP3%E5%8D%8F%E8%AE%AE/)
+[QUIC协议原理分析](https://zhuanlan.zhihu.com/p/32553477)
+
+新特性:
+- 快速握手，更低延迟
+  仅需1个RTT就可以同时完成连接握手与密钥协商
+- 连接迁移
+  Connection ID标识连接
+- 避免队头阻塞的多路复用
+  基于QUIC,多条Stream相互独立
+
+在quic实现的原有tcp功能:
+- 自动重传(可靠性)
+  Packet Header实现了可靠的连接。当UDP报文丢失后，通过Packet Header中的Packet Number实现报文重传
+- 流量控制
+  基于 stream 和 connecton 级别的流量控制
+- 拥塞控制
+  可插拔
+
+wireshark
+tcp.port == 443 && ((ip.src == 192.168.21.118 && ip.dst == 8.129.161.224) || (ip.src == 8.129.161.224 && ip.dst == 192.168.21.118))
