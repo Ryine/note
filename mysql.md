@@ -9,11 +9,13 @@ datetime
 
 整数
 tinyint smallint mediumint int bigint
-分别使用8位 16位 32位 64位的存储空间
+分别使用8位 16位 24位 32位 64位的存储空间
 
 字符串
-char 定长字符串，不足用空格填充 大小255 
-varchar 变长字符串 大小65535
+char 定长字符串，不足用空格填充 大小0-255 
+varchar 变长字符串 大小0-65535
+超长都会被截断
+
 
 小数
 decimal(m,d)-精确计算
@@ -57,6 +59,9 @@ ALTER TABLE bill_receipt_type ADD COLUMN birth VARCHAR(10) NOT NULL
 ALTER TABLE bill_receipt_type CHANGE COLUMN birth birthday VARCHAR(20) NOT NULL
 ALTER TABLE bill_receipt_type MODIFY COLUMN birth VARCHAR(120)
 ALTER TABLE bill_receipt_type DROP COLUMN birthday
+
+CREATE TABLE `bill_receipt_type` (   `receipt_type_id` int(11) NOT NULL COMMENT '序号',   `organ_id` int(11) DEFAULT NULL COMMENT '项目ID',   `receipt_type_name` varchar(128) DEFAULT NULL COMMENT '票据类型名称',   `receipt_type_code` varchar(64) DEFAULT NULL COMMENT '票据类型编码',   `is_system_print` int(1) DEFAULT NULL COMMENT '是否系统打印 0 否 1是',   `create_time` datetime DEFAULT NULL COMMENT '创建时间',   `status` int(1) DEFAULT NULL COMMENT '状态：0 无效  1有效',   `is_receive` int(1) DEFAULT '1' COMMENT '是否需要领用 1 是  0  否',   `is_restrict_number` int(1) DEFAULT '0' COMMENT '是否限制行数 1 是  0  否',   PRIMARY KEY (`receipt_type_id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='票据类型定义'
+
 #### 索引
 CREATE INDEX index_name ON bill_receipt_type(receipt_type_code)
 DROP INDEX index_name ON bill_receipt_type
@@ -74,7 +79,44 @@ DELETE FROM bill_receipt_type WHERE receipt_type_id = 2
 集合查询
 
 ### 函数
-IFNULL  DATE_FORMAT  GROUP_CONCAT  sum  count
+IFNULL IF  DATE_FORMAT  GROUP_CONCAT  sum  count DATEDIFF Rank
+
+### 锁
+锁的类型：读锁(共享锁)、写锁（排他锁）
+锁的粒度：表锁、行锁
+
+### 事务
+事务的四个特性
+1. 原子性
+2. 一致性
+3. 隔离性
+4. 持久性
+
+隔离级别
+2.read uncommitted：未提交读
+3.read committed：提交读
+4.repeatable read：可重复读(mysql默认隔离级别)
+5.serializable：串行化
+
+MVCC多版本并发控制
+
+
+### 索引
+[MySQL 索引知识点总结](https://cloud.tencent.com/developer/article/1761267)
+
+B+Tree索引 
+哈希索引
+全文索引
+
+### 全文搜索
+其他实现:elasticsearch
+[全文检索原理](https://cloud.tencent.com/developer/article/1658694)
+
+### 性能测试
+EXPLAIN
+
+### 性能优化
+延迟关联
 
 ## 实例
 狼人杀

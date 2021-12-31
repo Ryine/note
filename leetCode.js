@@ -96,8 +96,105 @@ var singleNumber = function(nums) {
   console.log(set[0])
   return set[0]
 };
-singleNumber([2,2,1])
+// singleNumber([2,2,1])
 
+class ListNode {
+  next = null
+  prev = null
+  key = null
+  value = null
+  constructor(key, value) {
+    this.key = key
+    this.value = value
+    // this.next = null
+    // this.prev = null
+  }
+}
+class DoubleList {
+    head = null
+    tail = null
+    size = 0
+    // 在链表头部添加节点 x，时间 O(1)
+    addFirst(node) {
+      if (!this.head) {
+        this.head = this.tail = node
+      } else {
+        node.next = this.head
+        this.head.prev = node
+        this.head = node
+      }
+      this.size++
+    }
 
+    // 删除链表中的 x 节点（x 一定存在）
+    // 由于是双链表且给的是目标 Node 节点，时间 O(1)
+    remove(node) {
+      if (node === this.head) {
+        this.head = this.head.next
+      } else if (node === this.tail) {
+        this.tail = this.tail.prev
+      } else {
+        node.prev.next = node.next
+        node.next.prev = node.prev
+      }
+      // if (node.prev) {
+      //   node.prev.next = node.next
+      // } else {
+      //   this.head = node.next
+      // }
+      // if (node.next) {
+      //   node.next.prev = node.prev
+      // } else {
+      //   this.tail = node.prev
+      // }
+      this.size--
+    }
+    
+    // 删除链表中最后一个节点，并返回该节点，时间 O(1)
+    removeLast() {
+      if (!this.tail) {
+        return null
+      }
+      const node = this.tail
+      this.cache.remove(node)
+      return node
+    }
+}
+
+class LRUCache {
+  hash = {}
+  cache = new DoubleList()
+  capacity = 0
+  constructor(capacity) {
+    this.capacity = capacity
+  }
+  get (key) {
+    let node = this.hash[key]
+    if (!node) return -1
+    // 将node移至链表头部
+    this.cache.remove(node)
+    this.cache.addFirst(node)
+    return node.value
+  }
+  put (key, value) {
+    let node = this.hash[key]
+    if (!node) {
+      // 新增节点
+      node = new ListNode(key, value)
+      this.hash[key] = node
+      this.cache.addFirst(node)
+      // 溢出
+      if (this.capacity < this.cache.size) {
+        const last = this.cache.removeLast()
+        delete this.hash[last.key]
+      }
+    } else {
+      // 将node移至链表头部
+      node.value = value
+      this.cache.remove(node)
+      this.cache.addFirst(node)
+    }
+  }
+}
 
 

@@ -1,5 +1,5 @@
 
-[vue原理](https://zhuanlan.zhihu.com/p/99014242)
+[vue原理](https://juejin.cn/post/6844903894301016072)
 
 
 ## createComputedGetter

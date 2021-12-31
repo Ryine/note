@@ -453,7 +453,7 @@ function object(o){
 es5实现:Object.create()
 
 寄生式继承
-寄生组合式继承:
+寄生组合式继承:最佳实现
 ```
 function inheritPrototype(subType, superType){
  var prototype = object(superType.prototype); //创建对象
