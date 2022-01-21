@@ -79,7 +79,7 @@ DELETE FROM bill_receipt_type WHERE receipt_type_id = 2
 集合查询
 
 ### 函数
-IFNULL IF  DATE_FORMAT  GROUP_CONCAT  sum  count DATEDIFF Rank
+IFNULL IF  DATE_FORMAT  GROUP_CONCAT  SUM  COUNT DATEDIFF RANK
 
 ### 锁
 锁的类型：读锁(共享锁)、写锁（排他锁）
@@ -100,6 +100,7 @@ IFNULL IF  DATE_FORMAT  GROUP_CONCAT  sum  count DATEDIFF Rank
 
 MVCC多版本并发控制
 
+### 数据库范式
 
 ### 索引
 [MySQL 索引知识点总结](https://cloud.tencent.com/developer/article/1761267)
@@ -118,35 +119,8 @@ EXPLAIN
 ### 性能优化
 延迟关联
 
-## 实例
-狼人杀
-- 表设计
-表名:werewolf_play
-属性:
-  paly_id 房间号，游戏id
-  create_time 创建时间
-  create_user_id 创建用户id
-  nums 游戏总人数
-  wolf 狼人
-  villager 村民
-  prophet 预言家
-  witch 女巫
-  hunter 猎人
-  cupid 丘比特
-  guard 守卫
-  idiot 白痴
 
-表名:play_role_detail
-属性:
-  res_id 关系id
-  paly_id 游戏id
-  user_id 用户id
-  create_time 创建时间
-  play_name 角色名称
-  play_num 编号
-
-
-
+### 实例
 
 权责切分设置
 - 查询列表
@@ -169,13 +143,7 @@ UPDATE bill_bestsign_interface SET `status` = 1 where bestsign_Interface_id = 18
 
 - 查询列表
 select bestsign_Interface_id, organ_id, client_Id, signature, private_key, client_Secret, status, interface_host, interface_mothed, interface_use, user_Account, enter_priseName, notification, interface_name, create_time, create_user_id, create_user_name, update_time, update_user_id, update_user_name from bill_bestsign_interface WHERE ( organ_id = ? ) limit 15
-select count(1) from (select
-  bestsign_Interface_id, organ_id, client_Id, signature, private_key, client_Secret, 
-  status, interface_host, interface_mothed, interface_use, user_Account, enter_priseName, 
-  notification, interface_name, create_time, create_user_id, create_user_name, update_time, 
-  update_user_id, update_user_name
-  from bill_bestsign_interface
-  WHERE (  organ_id = 1000 )) tmp_count
+
 - 查询详情
  select bestsign_Interface_id, organ_id, client_Id, signature, private_key, client_Secret, status, interface_host, interface_mothed, interface_use, user_Account, enter_priseName, notification, interface_name, create_time, create_user_id, create_user_name, update_time, update_user_id, update_user_name from bill_bestsign_interface where bestsign_Interface_id = ?
 
@@ -213,8 +181,6 @@ update_user_name = ?
 WHERE
 bestsign_Interface_id = ?
 
-- 新增
-select count(*) from bill_bestsign_interface WHERE ( organ_id = ? and interface_use = ? and status = ? )
 
 经营业务分配
 - 查询经营业务
@@ -234,9 +200,3 @@ where a.COMMUNITY_ID = 1007 and a.PAY_SERIAL_NBR = b.PAY_SERIAL_NBR and c.VOUCHE
 select * from eas_pay_check_order
 
 SELECT a.* FROM tb_uhome_pay_log a left JOIN tb_uhome_pay_log_detail b ON a.PAY_SERIAL_NBR = b.PAY_SERIAL_NBR left JOIN bill_vch_act_data_log c on b.pay_detail_id = c.pay_detail_id LEFT JOIN eas_pay_check_order d on c.VOUCHER_ID = d.order_id where a.COMMUNITY_ID = 1007 GROUP BY a.PAY_SERIAL_NBR
-
-
-## 计划
-尝试之前业务的sql
-
-## 问题记录
