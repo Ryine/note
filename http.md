@@ -233,6 +233,7 @@ Token是客户端第一次请求认证后,服务端进行校验，校验成功�
 
 
 ### 跨域
+跨域: 当前发起请求的域与该请求指向的资源所在的域不一样
 同源：协议、域名、端口相同
 [前端常见跨域解决方案](https://segmentfault.com/a/1190000011145364)
 
@@ -257,9 +258,10 @@ location / {
   add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS';
   add_header Access-Control-Allow-Headers 'DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization';
 } 
-4、node服务器
+4、中间服务器跨域(node)
 5、vue的http-proxy-middleware
 6、WebSocket协议跨域
+7、postMessage
 
 
 ### http代理的两种形式
@@ -271,10 +273,11 @@ location / {
 [HTTP2 详解](https://juejin.cn/post/6844903667569541133)
 
 新特性：
-多路复用(帧和流的概念)
+多路复用(流的概念实现了单连接上多请求 - 响应并行，解决了线头阻塞的问题，减少了 TCP 连接数量和 TCP 连接慢启动造成的问题)
 一个请求分被分为多个帧，一个请求是一个流，一个连接可以有多个流，不同流中的帧可以无序发送
 header压缩
 服务端推送
+请求优先级
 
 ### CDN + DNS
 [CDN原理简析](https://juejin.cn/post/6844903873518239752)
@@ -301,3 +304,20 @@ header压缩
 
 wireshark
 tcp.port == 443 && ((ip.src == 192.168.21.118 && ip.dst == 8.129.161.224) || (ip.src == 8.129.161.224 && ip.dst == 192.168.21.118))
+
+### 从浏览器输入URL地址开始
+- 浏览器
+  UI线程接收到输入URl事件后，交给网络线程，网络线程进行DNS寻址
+- DNS
+  客户端首先会在本机的hosts文件和hosts缓存中查找该域名对应的IP地址；如果本机中没有此信息，则会到我们的本地DNS进行询问该域名对应的IP地址；如果本地DNS中仍然没有该域名的IP信息时，则会由本地DNS依次向根DNS、顶级域DNS、权威DNS进行询问，最终本地DNS将IP地址发送给客户端
+- 应用层
+  得到DNS返回的IP地址后，网络线程发出http请求
+- 传输层
+  接收到应用层的数据, 通过三次握手和服务器建立连接，再将http报文按序号分割成多个报文段转发给网络层，同时提供差错控制、重传机制、流量控制、拥塞控制等功能
+- 网络层
+  接收到传输层的数据，网络层根据IP地址将数据发送到目标网络，再用ARP协议得到目标主机的MAC地址后交给链路层
+- 链路层（网络接口层）
+  接受到网络层的数据，将数据和硬件地址封装成MAC帧，交给网络设备发送给目标主机，目标主机解析MAC帧的硬件地址，如果和自己的相同就收下，往上层传送
+- 服务器
+  服务器收到http请求报文，解析后进行处理，返回http响应报文
+- 浏览器

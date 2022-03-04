@@ -32,16 +32,32 @@ forEach() 遍历的范围在第一次调用 callback 前就会确定。调用 fo
 2、带备忘录的递归解法
 3、动态规划
 通用思路:
-1、定义dp数组
-2、写出状态转移方程
-3、代码实现
+1、定义数组元素的含义
+2、写出状态转移方程(找出关系数组元素间的关系式)
+3、找出初始值
+4、代码实现
 
 ### 闭包
+闭包：一个函数和其外部环境的引用捆绑在一起，这样的组合就是闭包
+作用：闭包让你可以在一个内层函数中访问到其外层函数的作用域
+形成：代码执行的时候，检测到内部函数对当前作用域变量的访问，就会创建一个闭包作用域对象(词法环境)存储内部函数访问到的变量，再将这个作用域对象(词法环境)保存到内部函数的scope属性，这样当外部环境销毁时，内部函数仍能访问到外部变量
+执行上下文：代码运行时的环境
 
-闭包是指有权访问另一个函数作用域中的变量的函数(闭包就是能够读取其他函数内部变量的函数)
-(闭包只能取得包含函数中任何变量的最后一个值。别忘了闭包所保存的是整个变量对象，而不是某个特殊的变量)
+程序开始运行时，会先创建一个全局执行上下文并压入到执行栈中，之后每当有函数被调用，都会创建一个新的函数执行上下文并压入栈内。
+
+执行上下文创建会做两件事情：
+1. 创建词法环境LexicalEnvironment；
+2. 创建变量环境VariableEnvironment
+3. 绑定this
+
+
 [学习Javascript闭包（Closure）](https://www.ruanyifeng.com/blog/2009/08/learning_javascript_closures.html)
+[解读闭包，这次从ECMAScript词法环境，执行上下文说起](https://juejin.cn/post/6858052418862235656)
+[JS夯实之执行上下文与词法环境](https://juejin.cn/post/6844904145372053511)
+[JavaScript 的静态作用域链与“动态”闭包链](https://juejin.cn/post/6957913856488243237)
 参考资料:红宝书p73、p178
+
+问题：保留在闭包中的是某个变量还是整个作用域变量对象
 
 闭包的应用：
 1、防抖节流
@@ -52,12 +68,12 @@ function Person(){
     this.getName:function(){
         return name;
     }
-    this,setName:function(value){
+    this.setName:function(value){
         name = value;
     }
 }
 `
-3、存储变量
+3、存储变量(延长变量的生命周期)
 a、缓存代理（设计模式-代理模式）
 `
 var proxyMult = (function(){
@@ -76,7 +92,7 @@ b、单例模式
 var getSingle = function( fn ){
  var result;
  return function(){
- return result || ( result = fn .apply(this, arguments ) );
+    return result || ( result = fn.apply(this, arguments ) );
  }
 };
 `
@@ -111,7 +127,7 @@ window.addEventListener事件注册没有解绑(观察者模式)
 ### this
 [JavaScript 的 this 原理](https://www.ruanyifeng.com/blog/2018/06/javascript-this.html)
 [Javascript 的 this 用法](https://www.ruanyifeng.com/blog/2010/04/using_this_keyword_in_javascript.html)
-
+(参考你所不知道的js一)
 总的来说，this就是函数运行时所在的环境对象(this 永远指向最后调用它的那个对象)
 this的指向:
 1、普通的函数调用 (指向全局对象)
@@ -125,7 +141,7 @@ this的指向:
 <!-- 7、setTimeout的this指向 -->
 
 ### apply、call、bind
-[this、apply、call、bind](https://juejin.cn/post/6844903496253177863#heading-0)
+[this、apply、call、bind](https://juejin.cn/post/6844903496253177863#heading-0) 
 
 apply:在特定的作用域中调用函数，实际上等于设置函数体内 this 对象的值
 apply()方法接收两个参数：一个是在其中运行函数的作用域，另一个是参数数组。
@@ -149,50 +165,52 @@ Function.prototype.bind2 = function (context) {
 
 ### 设计模式
 1、单例模式
+单例模式的定义是：保证一个类仅有一个实例，并提供一个访问它的全局访问点
 典型应用：生成唯一的实例，比如登录浮窗
 示例：
 ```
 // 管理单例
-var getSingle = function( fn ){
- var result;
+let getSingle = function( fn ){
+ let result;
  return function(){
    return result || ( result = fn.apply(this, arguments ) );
  }
 };
 // 创建对象
-var createLoginLayer = function(){
+let createLoginLayer = function(){
   var div = document.createElement( 'div' );
   div.innerHTML = '我是登录浮窗';
   div.style.display = 'none';
   document.body.appendChild( div );
   return div;
 }; 
-var createSingleLoginLayer = getSingle( createLoginLayer );
+let createSingleLoginLayer = getSingle( createLoginLayer );
 ```
 
 2、策略模式
+策略模式的定义是：定义一系列的算法，把它们一个个封装起来，并且使它们可以相互替换。
 典型应用：表单校验
 示例：
 ```
 // 策略对象
-var strategies = {
- "S": function( salary ){
+var S = function( salary ){
  return salary * 4;
- },
- "A": function( salary ){
+};
+var A = function( salary ){
  return salary * 3;
- },
- "B": function( salary ){
+};
+var B = function( salary ){
  return salary * 2;
- }
-};
+}; 
 // 应用策略
-var calculateBonus = function( level, salary ){
- return strategies[ level ]( salary );
+var calculateBonus = function( func, salary ){
+ return func( salary );
 };
+calculateBonus( S, 10000 ); // 输出：40000
 ```
 
 3、代理模式
+代理模式是为一个对象提供一个代用品或占位符，以便控制对它的访问。
 典型应用：缓存代理可以为一些开销大的运算结果提供暂时的存储
 示例：
 ```
@@ -218,62 +236,54 @@ var createProxyFactory = function( fn ){
 var proxyMult = createProxyFactory( mult )
 
 ```
-
+应用2：Vue.extend方法缓存子类构造函数
 
 4、迭代器模式
 迭代器模式是指提供一种方法顺序访问一个聚合对象中的各个元素，而又不需要暴露该对象的内部表示。迭代器模式可以把迭代的过程从业务逻辑中分离出来，在使用迭代器模式之后，即使不关心对象的内部构造，也可以按顺序访问其中的每个元素。
 
 5、发布-订阅模式
-典型应用：事件模型
+发布—订阅模式又叫观察者模式，它定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都将得到通知。在 JavaScript 开发中，我们一般用事件模型来替代传统的发布—订阅模式。
+典型应用：事件模型、模块间通信、vue响应式原理
 示例：
 ```
-var Event = (function () {
-    var clientList = {},
-        listen,
-        trigger,
-        remove;
-    listen = function (key, fn) {
-        if (!clientList[key]) {
-            clientList[key] = [];
-        }
-        clientList[key].push(fn);
-    };
-    trigger = function () {
-        var key = Array.prototype.shift.call(arguments),
-            fns = clientList[key];
-        if (!fns || fns.length === 0) {
-            return false;
-        }
-        for (var i = 0, fn; fn = fns[i++];) {
-            fn.apply(this, arguments);
-        }
-    };
-    remove = function (key, fn) {
-        var fns = clientList[key];
-        if (!fns) {
-            return false;
-        }
-        if (!fn) {
-            fns && (fns.length = 0);
-        } else {
-            for (var l = fns.length - 1; l >= 0; l--) {
-                var _fn = fns[l];
-                if (_fn === fn) {
-                    fns.splice(l, 1);
-                }
-            }
-        }
-    };
-    return {
-        listen: listen,
-        trigger: trigger,
-        remove: remove
+class Event {
+  constructor() {
+    this.clientList = []
+  }
+  listen(key, fn) {
+    if (!this.clientList[key]) {
+      this.clientList[key] = []
     }
-})();
-Event.listen('squareMeter88', function (price) { // 小红订阅消息
-    console.log('价格= ' + price); // 输出：'价格=2000000'
-});
-Event.trigger('squareMeter88', 2000000); // 售楼处发布消息
+    this.clientList[key].push(fn); // 订阅的消息添加进缓存列表
+  }
+  trigger() {
+    let key = Array.prototype.shift.call(arguments), // (1);
+    fns = this.clientList[key]
+    if (!fns || fns.length === 0) { // 如果没有绑定对应的消息
+      return false
+    }
+    for (let i = 0; i < fns.length; i++) {
+      let fn = fns[i]
+      fn.apply(this, arguments) // (2) // arguments 是 trigger 时带上的参数
+    }
+  }
+  remove(key, fn) {
+    let fns = this.clientList[key];
+    if (!fns) { // 如果 key 对应的消息没有被人订阅，则直接返回
+      return false;
+    }
+    if (!fn) { // 如果没有传入具体的回调函数，表示需要取消 key 对应消息的所有订阅
+      fns && (fns.length = 0);
+    } else {
+      for (let l = fns.length - 1; l >= 0; l--) { // 反向遍历订阅的回调函数列表
+        let _fn = fns[l];
+        if (_fn === fn) {
+          fns.splice(l, 1); // 删除订阅者的回调函数
+        }
+      }
+    }
+  }
+}
 ```
 6、模板方法模式
 模板方法模式由两部分结构组成，第一部分是抽象父类，第二部分是具体的实现子类。通常在抽象父类中封装了子类的算法框架，包括实现一些公共方法以及封装子类中所有方法的执行顺序。子类通过继承这个抽象类，也继承了整个算法结构，并且可以选择重写父类的方法。
@@ -324,26 +334,39 @@ var Beverage = function (param) {
 8、装饰者模式
 这种给对象动态地增加职责的方式称为装饰者（decorator）模式。装饰者模式能够在不改变对象自身的基础上，在程序运行期间给对象动态地添加职责。跟继承相比，装饰者是一种更轻便灵活的做法，这是一种“即用即付”的方式，比如天冷了就多穿一件外套，需要飞行时就在头上插一支竹蜻蜓，遇到一堆食尸鬼时就点开 AOE（范围攻击）技能。
 
-典型应用:数据统计上报、插件式的表单验证
+典型应用:数据统计上报、插件式的表单验证、typeScript装饰器
 示例
 ```
-Function.prototype.before = function( beforefn ){
- var __self = this; // 保存原函数的引用
- return function(){ // 返回包含了原函数和新函数的"代理"函数
- beforefn.apply( this, arguments ); // 执行新函数，且保证 this 不被劫持，新函数接受的参数
- // 也会被原封不动地传入原函数，新函数在原函数之前执行
- return __self.apply( this, arguments ); // 执行原函数并返回原函数的执行结果，
- // 并且保证 this 不被劫持
- }
+Fimport React, { Component } from 'react';
+import send from './send';
+
+class Dialog extends Component {
+    constructor(props) {
+        super(props);
+    }
+    @send
+    showDialog(content) {
+        // do things
+    }
+    render() {
+        return (
+            <button onClick={() => this.showDialog('show dialog')}>showDialog</button>
+        )
+    }
 }
-Function.prototype.after = function( afterfn ){
- var __self = this;
- return function(){
- var ret = __self.apply( this, arguments );
- afterfn.apply( this, arguments );
- return ret;
- }
-}; 
+export default Dialog;
+<!-- --- -->
+export default function send(target, name, descriptor) {
+    let oldValue = descriptor.value;
+
+    descriptor.value = function () {
+        console.log(`before calling ${name} with`, arguments);
+        return oldValue.apply(this, arguments);
+    };
+
+    return descriptor;
+}
+
 
 ```
 
@@ -361,7 +384,7 @@ subClass.__proto__ = superClass
 构造函数模式
 原型模式
 组合使用构造函数模式和原型模式(使用最广泛)
-动态原型模式
+<!-- 动态原型模式 -->
 
 
 ### 原型链
