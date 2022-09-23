@@ -30,3 +30,4 @@ CSRF（Cross-site request forgery）跨站请求伪造：攻击者诱导受害�
 1. 同源检测,判断来源域名(Origin Header,Referer Header)
 2. Samesite Cookie属性(Samesite=Lax)
 3. 后端不要在GET接口中做用户操作
+4. Token验证，双重cookie

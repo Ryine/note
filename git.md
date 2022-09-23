@@ -76,11 +76,34 @@ git cherry-pick <commit>
 git branch --set-upstream branch-name origin/branch-name
 
 ## 分支
-创建分支并切换
+<!-- 创建分支并切换
 git checkout -b dev
 或者
 git branch dev
-git checkout dev
+git checkout dev -->
+
+创建分支
+git branch branch_name
+
+切换分支
+git switch branch_name
+
+创建并切换分支
+git switch -c branch_name
 
 删除分支
-git branch -d dev
+git branch -d branch_name
+
+推送本地分支到远程仓库
+git push origin branch_name
+
+## 撤销操作
+
+撤销工作区修改
+git restore <file>
+
+撤销暂存区修改至工作区
+git restore --staged <file>
+
+回退到某个版本
+git reset <commit_id>

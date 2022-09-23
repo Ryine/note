@@ -21,6 +21,12 @@ export 命令会有变量声明提前的效果。
 发现循环依赖时，并不会继续执行下去,只生成一个引用
 获取模块已经加载的当前的最新值
 
+### 依赖加载优先级
+1、从缓存中加载模块
+2、核心模块
+3、路径形式的文件模块
+4、自定义模块
+
 ### forEach循环
 forEach() 遍历的范围在第一次调用 callback 前就会确定。调用 forEach 后添加到数组中的项不会被 callback 访问到。如果已经存在的值被改变，则传递给 callback 的值是 forEach() 遍历到他们那一刻的值。已删除的项不会被遍历到。如果已访问的元素在迭代时被删除了（例如使用 shift()），之后的元素将被跳过
 
@@ -548,3 +554,68 @@ utf-8:一种变长的编码方法，字符长度从1个字节到4个字节不等
 utf-16:基本平面的字符占用2个字节，辅助平面的字符占用4个字节
 ASCII:
 GBK: 一个汉字占用2个字节，一个英文字母占用1个字节
+
+
+## 哈希表
+[HashMap为啥要二次Hash](https://juejin.cn/post/7100829047042605064)
+[HashMap里面的hashcode()详解](https://juejin.cn/post/6844903976295464968)
+[一篇文章教你读懂哈希表-HashMap](https://zhuanlan.zhihu.com/p/84327339)
+### 哈希函数
+hashmap: HashMap底层采用数组+链表/红黑树的数据结构来存储键值对的映射关系，数组就是若干个哈希槽Solt，HashMap会通过Key算出的哈希码来计算下标Index，Index决定了键值对应该落在哪个槽里。
+java hashMap实现
+1.根据数据类型获取hashcode
+2.将hashcode做二次hash,哈希码的高16位与低16位进行异或运算，得到一个新的哈希码
+3.位运算得到index
+
+java string hashcode方法
+```
+public int hashCode() {
+    int h = hash;
+    if (h == 0 && value.length > 0) {
+        char val[] = value;
+        for (int i = 0; i < value.length; i++) {
+            h = 31 * h + val[i];
+        }
+        hash = h;
+    }
+    return h;
+}
+```
+Integer的hashCode方法
+```
+public int hashCode(int value) {
+  return value
+}
+```
+Boolean中的hashCode方法实现
+```
+public int hashCode(boolean value) {
+  return value ? 1231 : 1237
+}
+```
+二次哈希
+```
+static final int hash(Object key) {
+    int h;
+    return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+}
+```
+位运算
+```
+static int indexFor(int h, int length) {
+    return h & (length-1);
+}
+```
+### 负载因子
+负载因子是哈希表的重要参数，其定义为：哈希表中已存有的元素与哈希表长度的比值。
+
+它是一个浮点数，表示哈希表目前的装满程度。由于表长是定值，而表中元素的个数越大，表中空余位置就会更少，发生碰撞的可能性也会进一步增大。
+
+哈希表的扩容策略依赖于负载因子阈值。基于性能与空间的选择，JDK标准库将HashMap的负载因子阈值定为0.75。
+
+### 哈希冲突
+1.分离链接法：链表
+2.开放定址法：线性探测、平方探测、双重哈希
+3.扩容（再散列）
+
+问题：冲突时key保存了吗
