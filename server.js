@@ -23,3 +23,11 @@ var server = net.createServer(function(socket) {
 
 //TCP服务器开始监听特定端口
 server.listen(PORT, HOST);
+Function.prototype.bind = function (context) {
+    let self = this
+    let args = Array.prototype.slice.call(arguments, 1)
+    return function () {
+        let secondArgs = Array.prototype.slice.call(arguments)
+        self.apply(context, args.concat(secondArgs))
+    }
+}

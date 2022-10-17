@@ -68,3 +68,5 @@ exit
 启动jenkins
 cd /data/uhomeres/jenkins
 java -jar jenkins.war
+
+/usr/local/jdk1.8.0_111/bin/java -Djava.awt.headless=true -DJENKINS_HOME=/data/jenkins -jar /usr/lib/jenkins/jenkins.war --logfile=/var/log/jenkins/jenkins.log --webroot=/var/cache/jenkins/war --httpPort=8098 --debug=5 --handlerCountMax=100 --handlerCountMaxIdle=20

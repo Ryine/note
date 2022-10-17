@@ -202,3 +202,4 @@ Prefetch、Preload: 资源预加载
 按需加载:组件库按需加载
 压缩css、js代码: css-minimizer-webpack-plugin压缩css；terser-webpack-plugin压缩js,删除注释、console
 webpack-bundle-analyzer: 根据插件分析体积结果查找问题,剔除没用到的代码,避免全量引入
+尝试用esbuild

@@ -164,6 +164,16 @@ TCP首部的固定长度是20字节（最小长度），带选项的话最大可
 
 
 超时重传时间:略大于加权平均往返时间RTTS,有公式可算
+
+#### 初始序列号设置
+参考TCP IP详解卷1：协议 
+
+如何防止序列号回绕
+1、初始序列号是随机的
+2、报文段有最大寿命，且连接释放时会等待2MSL
+3、报文序号不在接收窗口内会被丢弃
+4、时间戳选项
+
 ##### tcp的流量控制
 1、利用滑动窗口实现流量控制:让发送方的发送速率不要太快，要让接收方来得及接收
 窗口大小一直在变化
@@ -179,12 +189,55 @@ TCP首部的固定长度是20字节（最小长度），带选项的话最大可
 判断网络拥塞的依据就是出现了超时
 
 拥塞控制方法:
+初始拥塞窗口大小:2-4个最大报文段
 慢开始算法:每经过一个传输轮次（transmission round），拥塞窗口cwnd就加倍
 拥塞避免算法:每经过一个传输轮次（transmission round），拥塞窗口cwnd就加1
 快重传算法:发送方只要一连收到3个重复确认，就知道接收方确实没有收到报文段M3，因而应当立即进行重传（即“快重传”），这样就不会出现超时，发送方也不就
 会误认为出现了网络拥塞。
-快恢复
+快恢复:收到3个重复确认，执行快恢复算法，将门限值 = 拥塞窗口 / 2, 新拥塞窗口 = 新门限值， 后执行拥塞避免算法
+
 BBR算法
+[Linux Kernel 4.9 中的 BBR 算法与之前的 TCP 拥塞控制相比有什么优势？](https://www.zhihu.com/question/53559433/answer/135903103)
+
+#### 用户态tcp协议实现
+[谈谈用户态 TCP 协议实现](https://zhuanlan.zhihu.com/p/412758694)
+[用户态 TCP源码](https://gitee.com/kangyupl/sponge)
+- 写
+TCPConnection -> write
+  sender
+    stream_in -> write
+
+TCPConnection -> send_segment
+  _sender -> fill_window
+    ByteStream -> read
+  _sender -> seg.payload = _stream.read
+          -> send_segment(seg)
+              -> seg.header().seqno = wrap(_next_seqno, _isn)
+              -> _segments_out.push(seg);_segments_in_flight.push(seg)
+              -> _next_seqno += seg.payload().size()
+
+TCPConnection 
+              -> seg = _sender.segments_out().front()
+              -> seg.header().ackno = _receiver.ackno().value()
+              -> _segments_out.push(seg)
+TCPConnection -> clean_shutdown
+
+- 读
+TCPConnection -> segment_received 
+  _sender -> ack_received(ack)
+              -> _segments_in_flight.pop()
+
+  _receiver -> segment_received
+                -> data = payload
+    _reassembler -> push_substring(data, stream_index)
+                    -> merge
+                    -> _output.write(data)
+      ByteStream -> write
+  _receiver -> _abs_ackno = _reassembler.head_index()
+
+TCPConnection -> send_segment // 发送ACK包回复
+ 
+
 
 ### 计算机网络分层
 应用层：运输层为应用进程提供了端到端的通信，应用层则解决了应用与应用之间的通信，以及如何利用这些通信服务。应用层协议定义的是应用进程间通信和交 互的规则。

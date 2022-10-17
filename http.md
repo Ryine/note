@@ -123,6 +123,7 @@ Last-Modified 表示本地文件最后修改日期，浏览器会在request head
 [理解公钥与私钥](https://songlee24.github.io/2015/05/03/public-key-and-private-key/)
 [SSL/TLS协议运行机制的概述](https://www.ruanyifeng.com/blog/2014/02/ssl_tls.html)
 [数字签名是什么？](http://www.ruanyifeng.com/blog/2011/08/what_is_a_digital_signature.html)
+[深入理解HTTPS](https://juejin.cn/post/6844904113252089869#heading-11)
 
 ### 公钥与秘钥
 #### 私钥
@@ -282,6 +283,12 @@ header压缩
 ### CDN + DNS
 [CDN原理简析](https://juejin.cn/post/6844903873518239752)
 
+### TLS1.3
+改进:
+1个RTT可以完成握手，旧版本需2个RTT
+前向安全性
+会话复用(0-RTT)
+
 ### http3
 [深入剖析HTTP3协议](https://www.taohui.tech/2021/02/04/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/%E6%B7%B1%E5%85%A5%E5%89%96%E6%9E%90HTTP3%E5%8D%8F%E8%AE%AE/)
 [QUIC协议原理分析](https://zhuanlan.zhihu.com/p/32553477)
@@ -304,6 +311,7 @@ header压缩
 
 wireshark
 tcp.port == 443 && ((ip.src == 192.168.21.118 && ip.dst == 8.129.161.224) || (ip.src == 8.129.161.224 && ip.dst == 192.168.21.118))
+
 
 ### 从浏览器输入URL地址开始
 - 浏览器

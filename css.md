@@ -184,3 +184,11 @@ will-change 设置为 opacity、transform、top、left、bottom、right（其中
 1、软件渲染-只用cpu进行渲染，没有合成的过程
 2、使用软件绘图的合成化渲染
 3、硬件加速的合成化渲染
+
+### 移动端适配
+[为什么很多web项目还是使用 px，而不是 rem？](https://www.zhihu.com/question/313971223/answer/628236155)
+物理像素
+逻辑像素
+设备独立像素（css像素）
+viewport设置理想视口
+1px像素问题:伪元素+transform：scale缩放
